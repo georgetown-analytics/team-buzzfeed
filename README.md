@@ -2,6 +2,7 @@
 Team Buzzfeed Georgetown Data Science Capstone Project
 
 **Team Members**: Anurage Khaitan, Josh Erb, & Walter Tyrna
+
 **Domain Chosen**: New Media/Trending Content Analysis
 
 ##Hypothesis or project topic:
