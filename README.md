@@ -6,11 +6,10 @@ Team Buzzfeed Georgetown Data Science Capstone Project
 **Domain Chosen**: New Media/Trending Content Analysis
 
 ##Hypothesis or project topic:
-The project aims to analyze trends in the top articles across Buzzfeed’s six, country-specific, English-language websites (United States, United Kingdom, India, Australia, and Canada). We expect a correlation between cultural norms and content virality.  Our primary goal is to present an interactive visual that classifies and groups content types depending on different variables among countries. If time permits, we intend to develop a model to assess the probability of a given articles virality based on what keywords or phrases are included in the title and the country in which it is released.
+The project aims to analyze trends in the top articles across Buzzfeed’s five, country-specific, English-language websites (United States, United Kingdom, India, Australia, and Canada). We expect a correlation between cultural norms and content virality.  Our primary goal is to present an interactive visual that classifies and groups content types depending on different variables among countries. If time permits, we intend to develop a model to assess the probability of a given articles virality based on what keywords or phrases are included in the title and the country in which it is released.
 
 ##Available data sources (where we're going to get the data):
-Buzzfeed API - we will pull data from APIs corresponding to each of the five countries
-Google Trends data available from each country
+Buzzfeed API - we will pull data from APIs corresponding to each of the five countries.
 
 ##A brief description of what we aim to do:
 **Ingestion** - Write a python program that will load and read the buzzfeed trending API for all the six countries at various points throughout day or a program written for each country’s data feed.
