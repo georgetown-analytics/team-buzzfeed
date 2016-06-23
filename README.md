@@ -22,6 +22,10 @@ Buzzfeed API - we will pull data from APIs corresponding to each of the five cou
 
 **Feedback Loop** - Ultimately, this project aims to deliver an interactive map, possibly a word cloud, that displays what content is or has been trending in each of the five countries, as well as take keywords as input and display their probability of going viral in a given country. If we are able to house the database on a cloud server, this product could be a web application.
 
+##Is it any good?
+[Yes](https://news.ycombinator.com/item?id=3067434 "Yes, it is.")
+
 ##Questions or avenues of exploration required for the project
 What factors contribute to article popularity (culture, geography, keywords, relevancy in search, headline, headlines, etc)? What factors contribute most to virality?
 Do certain article tags fair better in certain countries as opposed to others? And do articles/categories published in other countries also do as well? Is it _even possible_ to predict the probability that something will go viral based on the title and the country it's in?
+
