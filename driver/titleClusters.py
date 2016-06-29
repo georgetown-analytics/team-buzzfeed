@@ -8,7 +8,9 @@ Data was pulled hourly beginning on May 18, 2016.
 ## Imports
 ##########################################################################
 
-import
+from loadbuzz import BuzzRec
+import nltk
+import gensim
 
 ##########################################################################
 ## Module Variables/Constants
@@ -20,7 +22,11 @@ import
 ## Functions
 ##########################################################################
 def articleType():
+    ##
 
+def lexicalDiversity():
+    ## need to take the number of unique words for all titles and divide
+    ## by the total number of words for all titles.
 
 def main():
 

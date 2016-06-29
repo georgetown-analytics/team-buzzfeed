@@ -68,7 +68,7 @@ def main():
         data = datafile.read()
         parse_json (country_name, time_stamp, data)
         datafile.close()
-        # Have to write the record to the database at soem point
+        # Have to write the record to the database at some point
 
     # Close database
     # ----- db.close()
