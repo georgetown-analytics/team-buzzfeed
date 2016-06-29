@@ -9,6 +9,7 @@ Data was pulled hourly beginning on May 18, 2016.
 ##########################################################################
 
 from loadbuzz import BuzzRec
+import os
 import nltk
 import gensim
 
