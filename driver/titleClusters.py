@@ -8,32 +8,37 @@ Data was pulled hourly beginning on May 18, 2016.
 ## Imports
 ##########################################################################
 
-from loadbuzz import BuzzRec
 import os
-import nltk
-import gensim
+import json
 
 ##########################################################################
 ## Module Variables/Constants
 ##########################################################################
 
-Path = ''
+Path = os.path.join('/tests/data')
 
 ##########################################################################
 ## Functions
 ##########################################################################
-def fetch_buzzes():
-    for article in
+def buzz_list():
+    """
+    Finds all buzzes in the provided folder and loads them into a json format
+    """
+    titleList = [] #list where I'll dump all the titles
+    for article in Path:
+        formatted = json.loads(article)
+        buzz = formatted['buzzes']
+        print(titleList)
+        return titleList.append(buzz['title'])
 
 def genCorpus():
     """
     Takes all titles from available data and dumps them into a single .txt
     file to be used as a corpus.
     """
-    Buzzes = fetch_buzzes()
-    for title in Buzzes:
-        path = os.path.join('../tests/data', '{}.json'.format(article))
-        with open(path, 'w') as f:
+    messTitles = buzz_list()
+    for title in messTitles:
+        with open(filepath, 'w') as f:
             f.write(buzzes['title'], '\n')
 
 def articleType():
@@ -45,10 +50,10 @@ def articleType():
 def lexicalDiversity():
     """Takes a corpus and computes number of unique words
     divided by total words"""
-    ## by the total number of words for all titles.
+    pass
 
 def main():
-    for buzz in
+    buzz_list()
 
 ##########################################################################
 ## Execution
