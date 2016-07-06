@@ -9,27 +9,41 @@ Data was pulled hourly beginning on May 18, 2016.
 ##########################################################################
 
 import os
+import glob
 import json
+import requests
 
 ##########################################################################
 ## Module Variables/Constants
 ##########################################################################
 
-Path = os.path.join('/tests/data')
+dataPath = glob.glob('./tests/data/*.txt')
 
 ##########################################################################
 ## Functions
 ##########################################################################
-def buzz_list():
+def grab_titles(filename): # this one's functioning properly!
     """
-    Finds all buzzes in the provided folder and loads them into a json format
+    Grabs all the buzzes' titles in the provided json file and loads them into a list
     """
-    titleList = [] #list where I'll dump all the titles
-    for article in Path:
-        formatted = json.loads(article)
-        buzz = formatted['buzzes']
-        print(titleList)
-        return titleList.append(buzz['title'])
+    title_list = [] #initializing an empty list where the titles will go
+    f = open(str(filename), 'r') #opening the file
+    jsonfile = json.loads(f.read()) #taking a peak inside and assuming we can understand it as a json
+
+    for item in jsonfile['buzzes']: #only looking at the article level
+        if item['title'] in title_list: #don't want no repeats
+            continue
+        else:
+            title_list.append(item['title']) #if it's a unique title, let's add it to our list!
+
+    return title_list
+
+def file_iterator():
+    """
+    Uses a janky while loop to iterate over files and then uses grab_titles() to
+    generate a dictionary organized by country
+    """
+    pass
 
 def genCorpus():
     """
@@ -53,7 +67,7 @@ def lexicalDiversity():
     pass
 
 def main():
-    buzz_list()
+    grab_titles(dataPath[5099]) # just running a simple test here
 
 ##########################################################################
 ## Execution
