@@ -40,20 +40,18 @@ def grab_titles(filename): # this one's functioning properly!
 
 def file_iterator():
     """
-    Uses a janky while loop to iterate over files and then uses grab_titles() to
+    Uses a janky while loop to iterate over files and uses grab_titles() to
     generate a dictionary organized by country
     """
     pass
 
-def genCorpus():
+def genCorpus(country):
     """
-    Takes all titles from available data and dumps them into a single .txt
-    file to be used as a corpus.
+    Takes all titles from file_iterator's dictionary data and dumps them
+    into a single .txt file based on the country you enter.
+    Giving you a country-specific corpus.
     """
-    messTitles = buzz_list()
-    for title in messTitles:
-        with open(filepath, 'w') as f:
-            f.write(buzzes['title'], '\n')
+    pass
 
 def articleType():
     """
@@ -61,7 +59,7 @@ def articleType():
     """
     pass
 
-def lexicalDiversity():
+def lexicalDiversity(corpus):
     """Takes a corpus and computes number of unique words
     divided by total words"""
     pass
