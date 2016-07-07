@@ -34,15 +34,12 @@ def grab_titles(filename): # this one's functioning properly!
     f = open(str(filename), 'r') #opening the file
     jsonfile = json.loads(f.read()) #taking a peak inside and assuming we can understand it as a json
 
-    for item in jsonfile['buzzes']: #only looking at the article level
-        if item['title'] in title_list: #don't want no repeats
-            continue
-        else:
-            title_list.append(item['title']) #if it's a unique title, let's add it to our list!
+    for item in jsonfile['buzzes']:
+        title_list.append(item['title']) # grabbing all the titles we can find
 
-    return title_list
+    return title_list # it's important to share our findings
 
-def file_iterator(country, dirPath):
+def file_iterator(country, dirPath): # this one's working!
     """
     Uses a janky loop to iterate over files and uses grab_titles() to
     generate a dictionary (with title lists) based on the country you entered.
@@ -64,7 +61,20 @@ def file_iterator(country, dirPath):
                     masterDic[country].update({item: new_val})
         return masterDic #hands back the populated dictionary for whatever use you see fit. Like generating a title corpus, perhaps?
     else:
-        print('You\'ve got to specify an actual country code. Hint: only two characters')
+        print('You\'ve got to specify an actual country code. Hint: only two characters, lower case')
+
+def twoWeeks(country, dirPath): #not sure how useful this one is...but it works
+    """
+    Lists the titles that were trending for approx. two weeks
+    """
+    file_iterator(country, dirPath) #grabbing titles and number of hours trending
+    i = 1 # there's probably a better way to show list numbers...
+    for thing in masterDic[country]: #read the title dictionary
+        if masterDic[country][thing] >= 336: #only titles that are in at least 2 weeks worth of API pulls
+            print(str(i) + '. ' + str(thing) + ': ' + str(masterDic[country][thing]))
+            i += 1
+        else:
+            continue
 
 def genCorpus(country):
     """
@@ -72,7 +82,8 @@ def genCorpus(country):
     into a single .txt file based on the country you enter.
     Giving you a country-specific corpus.
     """
-    # new_filename = str(country) #make sure it's a string
+
+    new_filename = str(country) + 'TitleCorpus' #generate a pretty title
     # (NOTHING TO SEE HERE)
     # with open(new_filename, 'w') as f:
     #   print(STUFF)
@@ -91,7 +102,7 @@ def lexicalDiversity(corpus):
 
 def main():
     test = input("Enter country code:").lower() # just running a simple test here
-    file_iterator(test, dataPath)
+    megaPop(test, dataPath)
 
 ##########################################################################
 ## Execution
