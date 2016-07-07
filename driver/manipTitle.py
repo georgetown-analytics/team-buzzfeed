@@ -102,7 +102,7 @@ def lexicalDiversity(corpus):
 
 def main():
     test = input("Enter country code:").lower() # just running a simple test here
-    megaPop(test, dataPath)
+    twoWeeks(test, dataPath)
 
 ##########################################################################
 ## Execution
