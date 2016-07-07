@@ -11,19 +11,19 @@ Data was pulled hourly beginning on May 18, 2016.
 import os
 import glob
 import json
-import requests
-from pprint import pprint
+from nltk import Text
+from nltk import word_tokenize
 
 ##########################################################################
 ## Module Variables/Constants
 ##########################################################################
 
-#coded to my file structure where all my dummy files are located
-dataList = glob.glob('./tests/data/*.txt')
+#coded to my [Josh's] file structure where all my dummy files are located
+dataList = glob.glob('./tests/data/*.txt') #generates a list of all .txt files in the given directory
 # initializing nested dictionary that will house all titles and instance counts
 masterDic = {'us': {'':0}, 'ca': {'':0}, 'uk': {'':0}, 'in': {'':0}, 'au': {'':0}}
-#coded to my file structure
-dataPath = './tests/corpora/'
+#coded to my [Josh's] file structure
+corpusPath = './tests/corpora/'
 
 ##########################################################################
 ## Functions
@@ -107,20 +107,42 @@ def monsterCorpus(dirPath, dataNames): #working but doesn't perform optimally, p
         for title in masterDic[country]:
             f.write(title + '\n\r')
 
-def articleType():
+def articleType(): # not sure if this is relevant/needed anymore
     """
     Guesses the article type based on the contents of the title
     """
     pass
 
-def lexicalDiversity(corpus):
-    """Takes a corpus and computes number of unique words
-    divided by total words"""
+def nltkPrep(corpName, dirPath):
+    """
+    Preps a text file for nltk analysis. Enter corpName without the .txt at
+    the end.
+    """
+    filename = '{}.txt'.format(str(corpName)) # adding extension to filename I'll add conditionality later
+    grabFile = os.path.join(dirPath, filename) # specifying where the file is
+    # open file
+    fo = open(grabFile, 'r')
+    rawtxt = str(fo.read())
+    response = word_tokenize(rawtxt)
+    print(len(response))
+
+def lexicalDiversity(corpName, dirPath):
+    """
+    Takes a corpus in the form of a .txt and computes number of unique words
+    divided by total words
+    """
+    nltkPrep(corpName, dirPath)
+
+
     pass
 
 def main():
+    """
+    Runs the manipTitle program as its creator intended it to be run!
+    """
     # currently only using for testing functions -> not quite sure
     # what the actual program should do
+    nltkPrep('compiledCorpus', corpusPath)
 
 ##########################################################################
 ## Execution
