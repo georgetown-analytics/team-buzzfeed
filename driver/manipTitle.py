@@ -18,10 +18,12 @@ from pprint import pprint
 ## Module Variables/Constants
 ##########################################################################
 
-#where all my dummy files are located
-dataPath = glob.glob('./tests/data/*.txt')
+#coded to my file structure where all my dummy files are located
+dataList = glob.glob('./tests/data/*.txt')
 # initializing nested dictionary that will house all titles and instance counts
 masterDic = {'us': {'':0}, 'ca': {'':0}, 'uk': {'':0}, 'in': {'':0}, 'au': {'':0}}
+#coded to my file structure
+dataPath = './tests/corpora/'
 
 ##########################################################################
 ## Functions
@@ -39,14 +41,14 @@ def grab_titles(filename): # this one's functioning properly!
 
     return title_list # it's important to share our findings
 
-def file_iterator(country, dirPath): # this one's working!
+def file_iterator(country, dataNames): # this one's working!
     """
     Uses a janky loop to iterate over files and uses grab_titles() to
     generate a dictionary (with title lists) based on the country you entered.
     Feeds into genCorpus() nicely.
     """
     if country in masterDic: #quick check to make sure we've got an actual country code to work with
-        for doc in dirPath: #for loop iterates over all files in dirPath list
+        for doc in dataNames: #for loop iterates over all files in dirPath list
             # grab the titles and dump them into a list
             country_titles = grab_titles(doc)
             # Read every title and add any that aren't in masterDic to masterDic
@@ -63,11 +65,11 @@ def file_iterator(country, dirPath): # this one's working!
     else:
         print('You\'ve got to specify an actual country code. Hint: only two characters, lower case')
 
-def twoWeeks(country, dirPath): #not sure how useful this one is...but it works
+def twoWeeks(country, dataNames): #not sure how useful this one is...but it works
     """
     Lists the titles that were trending for approx. two weeks
     """
-    file_iterator(country, dirPath) #grabbing titles and number of hours trending
+    file_iterator(country, dataNames) #grabbing titles and number of hours trending
     i = 1 # there's probably a better way to show list numbers...
     for thing in masterDic[country]: #read the title dictionary
         if masterDic[country][thing] >= 336: #only titles that are in at least 2 weeks worth of API pulls
@@ -76,18 +78,34 @@ def twoWeeks(country, dirPath): #not sure how useful this one is...but it works
         else:
             continue
 
-def genCorpus(country):
+def genCorpus(country, dirPath, dataNames):
     """
     Takes all titles from file_iterator's dictionary data and dumps them
-    into a single .txt file based on the country you enter.
-    Giving you a country-specific corpus.
+    into a single .txt file based on the country you enter. Thus,
+    giving you a country-specific corpus.
     """
+    # use inputs to generate a new file name & path
+    new_filename = str(country) + 'TitleCorpus' #generate a corpus title based on which country was entered
+    path = os.path.join(dirPath, '{}.txt'.format(new_filename))
+    #use other functions to generate a dictionary with titles
+    file_iterator(country, dataNames) #files the MasterDict for the given country
+    with open(path, 'w') as f:  #writes each title in a .txt file with a line break
+        for item in masterDic[country]:
+            f.write(item + '\n\r')
 
-    new_filename = str(country) + 'TitleCorpus' #generate a pretty title
-    # (NOTHING TO SEE HERE)
-    # with open(new_filename, 'w') as f:
-    #   print(STUFF)
-    pass
+def monsterCorpus(dirPath, dataNames): #working but doesn't perform optimally, probably because it's a huge f'in list
+    """
+    Uses the masterDic's keys in combo with genCorpus() to creat a corpus with every
+    title ever in the data you've provided.
+    """
+    path = os.path.join(dirPath, '{}.txt'.format('compiledCorpus'))
+    #populate the dictionary that has all titles and occurences
+    for country in masterDic:
+        file_iterator(country, dataNames)
+    #write all of the titles into a single text file
+    with open(path, 'w') as f:
+        for title in masterDic[country]:
+            f.write(title + '\n\r')
 
 def articleType():
     """
@@ -101,8 +119,8 @@ def lexicalDiversity(corpus):
     pass
 
 def main():
-    test = input("Enter country code:").lower() # just running a simple test here
-    twoWeeks(test, dataPath)
+    # currently only using for testing functions -> not quite sure
+    # what the actual program should do
 
 ##########################################################################
 ## Execution
