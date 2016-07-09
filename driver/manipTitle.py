@@ -65,7 +65,7 @@ def file_iterator(country, dataNames): # this one's working!
     else:
         print('You\'ve got to specify an actual country code. Hint: only two characters, lower case')
 
-def twoWeeks(country, dataNames): #not sure how useful this one is...but it works
+def twoWeeks(country, dataNames): #might not be working correctly...lists seem to be identical regardless of country
     """
     Lists the titles that were trending for approx. two weeks
     """
@@ -78,7 +78,7 @@ def twoWeeks(country, dataNames): #not sure how useful this one is...but it work
         else:
             continue
 
-def genCorpus(country, dirPath, dataNames):
+def genCorpus(country, dirPath, dataNames): #currently spitting out same corpus regardless of country
     """
     Takes all titles from file_iterator's dictionary data and dumps them
     into a single .txt file based on the country you enter. Thus,
@@ -131,9 +131,7 @@ def lexicalDiversity(corpName, dirPath):
     Takes a corpus in the form of a .txt and computes number of unique words
     divided by total words
     """
-    nltkPrep(corpName, dirPath)
-
-
+    # nltkPrep(corpName, dirPath)
     pass
 
 def main():
@@ -143,6 +141,9 @@ def main():
     # currently only using for testing functions -> not quite sure
     # what the actual program should do
     nltkPrep('compiledCorpus', corpusPath)
+    # test = input('gimme a country:')
+    # genCorpus(test, corpusPath, dataList)
+    # twoWeeks(test, dataList)
 
 ##########################################################################
 ## Execution
