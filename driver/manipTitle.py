@@ -11,6 +11,7 @@ Data was pulled hourly beginning on May 18, 2016.
 import os
 import glob
 import json
+from pprint import pprint
 from nltk import Text
 from nltk import word_tokenize
 
@@ -21,7 +22,7 @@ from nltk import word_tokenize
 #coded to my [Josh's] file structure where all my dummy files are located
 dataList = glob.glob('./tests/data/*.txt') #generates a list of all .txt files in the given directory
 # initializing nested dictionary that will house all titles and instance counts
-masterDic = {'us': {'':0}, 'ca': {'':0}, 'uk': {'':0}, 'in': {'':0}, 'au': {'':0}}
+masterDic = {'us': {}, 'ca': {}, 'uk': {}, 'in': {}, 'au': {}}
 #coded to my [Josh's] file structure
 corpusPath = './tests/corpora/'
 
@@ -50,17 +51,21 @@ def file_iterator(country, dataNames): # this one's working!
     if country in masterDic: #quick check to make sure we've got an actual country code to work with
         for doc in dataNames: #for loop iterates over all files in dirPath list
             # grab the titles and dump them into a list
-            country_titles = grab_titles(doc)
-            # Read every title and add any that aren't in masterDic to masterDic
-            for item in country_titles: #looks at every title in the list
+            if doc[13:15] == country: #only need to look at titles for the entered country
+                country_titles = grab_titles(doc)
+                # Read every title and add any that aren't in masterDic to masterDic
+                for item in country_titles: #looks at every title in the list
                 #if it's not there, add new title to dictionary
-                if item not in masterDic[country]:
-                    masterDic[country].update({item: 1})
-                #if it is there, add one to the instance ticker
-                else:
-                    original_val = masterDic[country][item]
-                    new_val = original_val + 1
-                    masterDic[country].update({item: new_val})
+                    if item not in masterDic[country]:
+                        #if it is there, +1 to the instance ticker
+                        masterDic[country].update({item: 1})
+                    else:
+                        original_val = masterDic[country][item]
+                        new_val = original_val + 1
+                        masterDic[country].update({item: new_val})
+            else:
+                print('We\'re having trouble finding the files associated with that country...')
+                continue
         return masterDic #hands back the populated dictionary for whatever use you see fit. Like generating a title corpus, perhaps?
     else:
         print('You\'ve got to specify an actual country code. Hint: only two characters, lower case')
@@ -81,8 +86,8 @@ def twoWeeks(country, dataNames): #might not be working correctly...lists seem t
 def genCorpus(country, dirPath, dataNames): #currently spitting out same corpus regardless of country
     """
     Takes all titles from file_iterator's dictionary data and dumps them
-    into a single .txt file based on the country you enter. Thus,
-    giving you a country-specific corpus.
+    into a single .txt file based on the country you enter. Thus giving you a
+    country-specific corpus.
     """
     # use inputs to generate a new file name & path
     new_filename = str(country) + 'TitleCorpus' #generate a corpus title based on which country was entered
@@ -104,8 +109,9 @@ def monsterCorpus(dirPath, dataNames): #working but doesn't perform optimally, p
         file_iterator(country, dataNames)
     #write all of the titles into a single text file
     with open(path, 'w') as f:
-        for title in masterDic[country]:
-            f.write(title + '\n\r')
+        for item in masterDic.keys():   # pulls keys into a list and uses list to call titles from masterDic
+            for value in masterDic[item]:
+                f.write(value + '\n\r') # this feels janky, but it works for now
 
 def articleType(): # not sure if this is relevant/needed anymore
     """
@@ -140,10 +146,11 @@ def main():
     """
     # currently only using for testing functions -> not quite sure
     # what the actual program should do
-    nltkPrep('compiledCorpus', corpusPath)
+    # nltkPrep('compiledCorpus', corpusPath)
     # test = input('gimme a country:')
     # genCorpus(test, corpusPath, dataList)
     # twoWeeks(test, dataList)
+    monsterCorpus(corpusPath, dataList)
 
 ##########################################################################
 ## Execution
