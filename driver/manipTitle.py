@@ -64,7 +64,6 @@ def file_iterator(country, dataNames): # this one's working!
                         new_val = original_val + 1
                         masterDic[country].update({item: new_val})
             else:
-                print('We\'re having trouble finding the files associated with that country...')
                 continue
         return masterDic #hands back the populated dictionary for whatever use you see fit. Like generating a title corpus, perhaps?
     else:
@@ -147,10 +146,10 @@ def main():
     # currently only using for testing functions -> not quite sure
     # what the actual program should do
     # nltkPrep('compiledCorpus', corpusPath)
-    # test = input('gimme a country:')
-    # genCorpus(test, corpusPath, dataList)
+    test = input('gimme a country:')
+    genCorpus(test, corpusPath, dataList)
     # twoWeeks(test, dataList)
-    monsterCorpus(corpusPath, dataList)
+    # monsterCorpus(corpusPath, dataList)
 
 ##########################################################################
 ## Execution
