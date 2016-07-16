@@ -135,14 +135,19 @@ def nltkPrep(corpName, dirPath):
     cleanText = nltk.Text(toke) # the file is now stored in memory as an nltk ready file (may cause performance issues)
     return cleanText
 
-def lexicalDiversity(corpName, dirPath):
+def lexicalDiversity(textfile, dirPath):
     """
     Takes a corpus in the form of a .txt and computes number of unique words
     divided by total words. (Higher value indicates greater diversity.)
     """
-    corpus = nltkPrep(corpName, dirPath) # make sure that corpus will play nice with nltk modules
+    corpus = nltkPrep(textfile, dirPath) # make sure that corpus will play nice with nltk modules
     print(len(set(corpus)) / len(corpus))
     return len(set(corpus)) / len(corpus)
+
+def freqDist(textfile, dirPath):
+    """
+    
+    """
 
 def main():
     """
