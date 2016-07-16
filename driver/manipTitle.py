@@ -11,8 +11,8 @@ Data was pulled hourly beginning on May 18, 2016.
 import os
 import glob
 import json
+import nltk
 from pprint import pprint
-from nltk import Text
 from nltk import word_tokenize
 
 ##########################################################################
@@ -23,7 +23,7 @@ from nltk import word_tokenize
 dataList = glob.glob('./tests/data/*.txt') #generates a list of all .txt files in the given directory
 # initializing nested dictionary that will house all titles and instance counts
 masterDic = {'us': {}, 'ca': {}, 'uk': {}, 'in': {}, 'au': {}}
-#coded to my [Josh's] file structure
+#coded to my [Josh's] file structure for corpora destination
 corpusPath = './tests/corpora/'
 
 ##########################################################################
@@ -97,7 +97,7 @@ def genCorpus(country, dirPath, dataNames): #currently spitting out same corpus 
         for item in masterDic[country]:
             f.write(item + '\n\r')
 
-def monsterCorpus(dirPath, dataNames): #working but doesn't perform optimally, probably because it's a huge f'in list
+def monsterCorpus(dirPath, dataNames):
     """
     Uses the masterDic's keys in combo with genCorpus() to creat a corpus with every
     title ever in the data you've provided.
@@ -120,24 +120,29 @@ def articleType(): # not sure if this is relevant/needed anymore
 
 def nltkPrep(corpName, dirPath):
     """
-    Preps a text file for nltk analysis. Enter corpName without the .txt at
-    the end.
+    Takes the name of the file and it's directory path as inputs, and makes a
+    raw text file ready for nltk analysis.
     """
-    filename = '{}.txt'.format(str(corpName)) # adding extension to filename I'll add conditionality later
-    grabFile = os.path.join(dirPath, filename) # specifying where the file is
-    # open file
-    fo = open(grabFile, 'r')
-    rawtxt = str(fo.read())
-    response = word_tokenize(rawtxt)
-    print(len(response))
+    if corpName[-4:] == '.txt':  #looking at the file type
+        print('Thank you for entering a valid file type ' + '(' + str(corpName[-4:]) + ')')
+    else:
+        corpName = '{}.txt'.format(str(corpName)) # adding extension to filename, in case it wasn't included
+
+    grabFile = os.path.join(dirPath, corpName) # specifying where the file is
+    specs = open(grabFile, 'r') # open file
+    rawtxt = str(specs.read()) # looking at the file
+    toke = word_tokenize(rawtxt) #tokenizing the file
+    cleanText = nltk.Text(toke) # the file is now stored in memory as an nltk ready file (may cause performance issues)
+    return cleanText
 
 def lexicalDiversity(corpName, dirPath):
     """
     Takes a corpus in the form of a .txt and computes number of unique words
-    divided by total words
+    divided by total words. (Higher value indicates greater diversity.)
     """
-    # nltkPrep(corpName, dirPath)
-    pass
+    corpus = nltkPrep(corpName, dirPath) # make sure that corpus will play nice with nltk modules
+    print(len(set(corpus)) / len(corpus))
+    return len(set(corpus)) / len(corpus)
 
 def main():
     """
@@ -145,9 +150,9 @@ def main():
     """
     # currently only using for testing functions -> not quite sure
     # what the actual program should do
-    # nltkPrep('compiledCorpus', corpusPath)
-    test = input('gimme a country:')
-    genCorpus(test, corpusPath, dataList)
+    lexicalDiversity('compiledCorpus', corpusPath)
+    # test = input('gimme a country:')
+    # genCorpus(test, corpusPath, dataList)
     # twoWeeks(test, dataList)
     # monsterCorpus(corpusPath, dataList)
 
