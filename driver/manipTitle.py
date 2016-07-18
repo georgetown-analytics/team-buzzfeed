@@ -104,8 +104,8 @@ def monsterCorpus(dirPath, dataNames):
     """
     path = os.path.join(dirPath, '{}.txt'.format('compiledCorpus'))
     #populate the dictionary that has all titles and occurences
-    for country in masterDic:
-        file_iterator(country, dataNames)
+    for country in masterDic: # this may be problematic, as it populates masterDic
+        file_iterator(country, dataNames) # with duplicative titles
     #write all of the titles into a single text file
     with open(path, 'w') as f:
         for item in masterDic.keys():   # pulls keys into a list and uses list to call titles from masterDic
@@ -146,7 +146,7 @@ def lexicalDiversity(textfile, dirPath):
 
 def freqDist(textfile, dirPath):
     """
-    
+
     """
 
 def main():

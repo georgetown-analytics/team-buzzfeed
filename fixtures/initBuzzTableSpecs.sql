@@ -1,0 +1,21 @@
+CREATE TABLE junebuzz (
+pull_cc         CHAR (2),
+pull_ts         TIMESTAMP,
+u_name          VARCHAR (50),
+last_upd        CHAR (10),
+pub             CHAR (10),
+pub_ts          TIMESTAMP,
+cc              CHAR (5),
+impressions     Integer,
+lang            CHAR (2),
+id              Integer,
+descr           VARCHAR (1500),
+cat             VARCHAR (50),
+cat_id          Integer,
+u_id            Integer,
+title           VARCHAR (200),
+status          VARCHAR (10),
+metav           VARCHAR (25),
+tags            VARCHAR (1500),
+comment_stat    VARCHAR (50)
+);
