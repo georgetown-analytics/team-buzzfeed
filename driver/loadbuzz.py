@@ -1,5 +1,5 @@
 class BuzzRec(object):
-
+    
     def __init__(self):
         # MAKE THESE TIMESTAMP
         self.pull_ts = ""
