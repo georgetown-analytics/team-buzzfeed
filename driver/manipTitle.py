@@ -14,6 +14,7 @@ import json
 import nltk
 from pprint import pprint
 from nltk import word_tokenize
+from nltk.corpus import treebank
 
 ##########################################################################
 ## Module Variables/Constants
@@ -144,6 +145,9 @@ def lexicalDiversity(textfile, dirPath):
     print(len(set(corpus)) / len(corpus))
     return len(set(corpus)) / len(corpus)
 
+def drawTree(textfile, dirPath):
+    corpus = nltkPrep(textfile, dirPath)
+
 def freqDist(textfile, dirPath):
     """
 
@@ -155,7 +159,7 @@ def main():
     """
     # currently only using for testing functions -> not quite sure
     # what the actual program should do
-    lexicalDiversity('compiledCorpus', corpusPath)
+    # lexicalDiversity('compiledCorpus', corpusPath)
     # test = input('gimme a country:')
     # genCorpus(test, corpusPath, dataList)
     # twoWeeks(test, dataList)
