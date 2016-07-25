@@ -146,12 +146,14 @@ def lexicalDiversity(textfile, dirPath):
     return len(set(corpus)) / len(corpus)
 
 def drawTree(textfile, dirPath):
-    corpus = nltkPrep(textfile, dirPath)
+    # corpus = nltkPrep(textfile, dirPath)
+    pass
 
 def freqDist(textfile, dirPath):
-    """
+    pass
 
-    """
+# For gen title, just make a simple Markov chain title generator
+# i.e. given a first word, what's the most probable word to follow 
 
 def main():
     """
