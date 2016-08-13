@@ -128,7 +128,7 @@ class MarkovEngine():
                 for i in range(len(title_words)-1, 0, -1):
                     # Checks whether the current word ends with relevant
                     # punctuation. If it does, use the current word as the last word.
-                    if title_words[i][-1] in ['!', '?']:
+                    if title_words[i][-1] in ['!', '?']: # This is why everything is ending with ? > how do we fix?
                         emph = i + 1
                     else:
                         words[i][-1] = ' '
@@ -265,7 +265,7 @@ def start_engine(filepath, country, length=15):
 
 def main():
     user_input = str(input('Which country do you want to generate a title for?'))
-    start_engine(corpus_dir, user_input)
+    start_engine(corpus_dir, user_input, 5)
 
 ##########################################################################
 ## Execution
