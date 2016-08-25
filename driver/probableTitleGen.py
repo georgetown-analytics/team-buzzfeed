@@ -104,16 +104,13 @@ def generate_title(seedword, text, length=10):
     # Going to use a while loop to grab all likely words until we have a title
     # of sufficient length
     while len(word_list) <= length:
-        # Make sure we're reloading the trigrams after every append
-        # finder = TrigramCollocationFinder.from_words(text)
         print(seedword) # Just trying to see what's my problem is, looks like punctuation...
-
         # this will be used to filter trigram data based on the provided seedword
         word_filter = lambda *w: seedword not in w
         # here's where it gets tricky, find the most common ngram using the seedword
-        filter_apply = finder
+        finder.apply_ngram_filter(word_filter)
         # using a NLTK's likelihood ratio calculator, find the most likely trigram for the seedword
-        best_trigram = filter_apply.nbest(metrics.likelihood_ratio, 1)
+        best_trigram = finder.nbest(metrics.likelihood_ratio, 1)
         # find the seedword in the best tuple
         winner = best_trigram[0]
         seedword_index = winner.index(seedword) # << current source of frustration
