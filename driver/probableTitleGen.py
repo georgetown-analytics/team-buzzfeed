@@ -11,6 +11,8 @@ probabilities. Which then feeds into a function that solicits a seed word and a
 
 import os
 import nltk
+import enchant
+from random import randint
 from nltk import word_tokenize
 from nltk.util import ngrams
 from nltk.collocations import *
@@ -50,6 +52,15 @@ def avg_title_len(corpName, corpPath=None): # Not a necessary part of the title 
     avg_len = int(total_len / n_titles)
     return avg_len
 
+def clean_list(a_list):
+    """
+    Apparently the only way to drop all of the unwanted characters
+    """
+    # I don't want these in my title
+    undesirables = [',', '``', '`', ' `', '` ', "'", '"', '""', "''", '/', '{', '}', '(', ')', '[', ']']
+    new_list = [x for x in a_list if x not in undesirables]
+    return new_list
+
 def nltkPrep(corpName, dirPath=None): # Step 1
     """
     Takes the name of the file and it's directory path as inputs, and tokenizes
@@ -68,17 +79,35 @@ def nltkPrep(corpName, dirPath=None): # Step 1
 
     for row in text:
         if len(row) > 1:
-            title_list.append(row[:-1])
+            title_list.append(str(row[:-1]))
         else:
             continue
 
     # Make the list a string, because that's how NLTK likes it
     title_list = str(title_list)
     # Tokenize the string and spit back an NLTK ready object
-    tokens = word_tokenize(title_list)
+    tokens = nltk.word_tokenize(title_list)
+    tokens = clean_list(tokens)
     clean_text = nltk.Text(tokens)
     return clean_text
 
+def list_tup_iter(trigram_list, seedword):
+    """
+    Meant to find the first instance in a word in a list of tuples and return
+    the subsequent word in the tuple.
+    """
+    trigram_list = clean_list(trigram_list)
+
+    for tup in trigram_list:
+        for word in tup:
+            if word == seedword and tup.index(word) != 2:
+                ind = tup.index(seedword) + 1
+                new_seedword = tup[ind] #grab the subsequent word
+                break
+            else:
+                continue
+    # hand the word back to whomever called the function
+    return new_seedword
 
 def generate_title(seedword, text, length=10):
     """
@@ -92,38 +121,44 @@ def generate_title(seedword, text, length=10):
     http://stackoverflow.com/questions/21165702/nltk-collocations-for-specific-words
     """
     # prepare for the title!
-    seedword = str(seedword)
-    word_list = [seedword]
+    seed = str(seedword)
+    seed = seed.title()
+
+    if seed not in text: # accounting for possibility that the word isn't in the corpus
+        random_index = randint(0, len(text))
+        seed = text[random_index]
+        word_list = [seed]
+    else:
+        word_list = [seed] # initialize our list of title words
 
     # initializing the measurment tool from NLTK
     metrics = nltk.collocations.TrigramAssocMeasures()
 
-    # initializing a finder (similar to a cursor object with psycopg)
-    finder = TrigramCollocationFinder.from_words(text)
-
     # Going to use a while loop to grab all likely words until we have a title
     # of sufficient length
-    while len(word_list) <= length:
-        print(seedword) # Just trying to see what's my problem is, looks like punctuation...
-        # this will be used to filter trigram data based on the provided seedword
-        word_filter = lambda *w: seedword not in w
-        # here's where it gets tricky, find the most common ngram using the seedword
-        finder.apply_ngram_filter(word_filter)
-        # using a NLTK's likelihood ratio calculator, find the most likely trigram for the seedword
-        best_trigram = finder.nbest(metrics.likelihood_ratio, 1)
-        # find the seedword in the best tuple
-        winner = best_trigram[0]
-        seedword_index = winner.index(seedword) # << current source of frustration
-
-        # use the returned index to grab the next word and append it to the word list
-        if seedword_index < 2 and seedword.isalpha():
-            seedword_index += 1
-            seedword = best_trigram[seedword_index]# use most recent word as new seedword
-            word_list.append(seedword) # append new word to our list
+    while len(word_list) < length:
+        # initiate the filter with the seed
+        word_filter = lambda *w: seed not in w
+        # grab a coopy of the trigram list
+        finder_fltr = TrigramCollocationFinder.from_words(text)
+        # apply the word filter
+        finder_fltr.apply_ngram_filter(word_filter)
+        # find the best five trigrams
+        best_trigram = finder_fltr.nbest(metrics.likelihood_ratio, 5)
+        # grab one of these trigrams at random
+        winner = best_trigram[randint(0, 3)]
+        # what's our seed's index?
+        seed_index = winner.index(seed)
+        # make sure there's something there to grab
+        if seed_index < 2:
+            new_word = winner[int(seed_index + 1)] # << Every so often this is going to thrown an error... how do I mitigate?
+            word_list.append(new_word)
         else:
-            #seedword = best_trigram[seedword_index]
-            #word_list.append(seedword)
-            continue # don't use any trigrams in which the seedword is the last instance
+            new_word = winner[int(seed_index - 1)]
+            word_list.append(new_word)
+
+        # Replace old-seed with the new one!
+        seed = new_word
 
     buzz_title = '' # preparing for our final title
     for word in word_list:
@@ -131,13 +166,16 @@ def generate_title(seedword, text, length=10):
 
     # Now make it pretty
     buzz_title = buzz_title[:-1]
-    return buzz_title.title()
+    return buzz_title
 
 def main():
-    # do something, maybe?
-    nu_word = input('Please enter a seed word for the title generator: ')
+    # solicit a seed from the user
+    seed = input('Please enter a seed word for the title generator: ')
+    # clean up a corpus
     clean_text = nltkPrep('usTitleCorpus.txt', '/Users/josh.erb/repos/feed-the-buzz/tests/corpora')
-    output = generate_title(nu_word, clean_text)
+    # use the provided seed and the cleaned up corpus to generate a title
+    output = generate_title(seed, clean_text)
+    # show me what that title is
     print(output)
 
 ##########################################################################
