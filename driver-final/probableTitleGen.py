@@ -11,7 +11,6 @@ probabilities. Which then feeds into a function that solicits a seed word and a
 
 import os
 import nltk
-import enchant
 from random import randint
 from nltk import word_tokenize
 from nltk.util import ngrams
@@ -82,6 +81,8 @@ def nltkPrep(corpName, dirPath=None): # Step 1
             title_list.append(str(row[:-1]))
         else:
             continue
+    # tell the user how many titles we've looked at
+    print('We analyzed {} unique titles!'.format(len(title_list)))
 
     # Make the list a string, because that's how NLTK likes it
     title_list = str(title_list)
